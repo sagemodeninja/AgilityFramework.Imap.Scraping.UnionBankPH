@@ -4,7 +4,7 @@ Scrape email notifications from UnionBank PH into .NET objects.
 
 ### Downloads
 
-You can get the latest package on [Nuget](https://www.nuget.org/packages/AgilityFramework.Imap/).
+You can get the latest package on [Nuget](https://www.nuget.org/packages/AgilityFramework.Imap.Scraping.UnionBankPH/).
 
 ### Usage & Examples
 

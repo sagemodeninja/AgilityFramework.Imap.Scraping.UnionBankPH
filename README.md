@@ -20,6 +20,7 @@ Console.WriteLine(fundTransfer.Amount);
 ### Features
 
 + Supports Fund Transfer confirmations.
++ Supports Load Purchase confirmations.
 
 ### Credits
 

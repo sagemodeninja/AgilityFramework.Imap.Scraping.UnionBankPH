@@ -5,9 +5,9 @@ using HtmlAgilityPack;
 
 namespace AgilityFramework.Imap.Scraping.UnionBankPH
 {
-    public class FundTransfer
+    public class LoadPurchase
     {
-        public FundTransfer() { }
+        public LoadPurchase() { }
 
         public string ReferenceNo { get; set; }
 
@@ -15,15 +15,9 @@ namespace AgilityFramework.Imap.Scraping.UnionBankPH
 
         public string Recipient { get; set; }
 
-        public string RecipientBank { get; set; }
-
-        public string RecipientAccount { get; set; }
-
         public decimal Amount { get; set; }
 
-        public string Message { get; set; }
-
-        public static FundTransfer Scrape(string html)
+        public static LoadPurchase Scrape(string html)
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(html);
@@ -40,51 +34,31 @@ namespace AgilityFramework.Imap.Scraping.UnionBankPH
             var referenceGroup = headCells.ElementAt(0);
             var transDateGroup = headCells.ElementAt(1);
             var toGroup = bodyRows.ElementAt(1);
-            var amountGroup = bodyRows.ElementAt(2);            
-            var messageGroup = bodyRows.Count() == 4 ? bodyRows.ElementAt(3) : null;
+            var amountGroup = bodyRows.ElementAt(2);
 
             var referenceNo = referenceGroup.Descendants("span").ElementAt(1).InnerText;
             var transDate = transDateGroup.Descendants("span").ElementAt(1).InnerText;
-            var recipient = toGroup.Descendants("div").ElementAt(0).InnerText;
-            var recipientBank = toGroup.Descendants("div").ElementAt(1).InnerText;
-            var recipientAccount = toGroup.Descendants("div").ElementAt(2).InnerText;
+            var recipient = toGroup.Descendants("span").ElementAt(0).InnerText;
             var strAmount = amountGroup.Descendants("span").ElementAt(1).InnerText;
-            var message = messageGroup?.Descendants("span").ElementAt(0).InnerText ?? "";
 
             // Sanitation...
             referenceNo = referenceNo.Trim();
             transDate = transDate.Trim();
             recipient = recipient.Trim()
-                                 .Replace("=\n", string.Empty)
                                  .Replace("=", string.Empty);
-            recipientBank = recipientBank.Trim()
-                                         .Replace("=\n", string.Empty)
-                                         .Replace("=", string.Empty);
-            recipientAccount = recipientAccount.Trim();
             strAmount = strAmount.Trim()
                                  .Replace(",", string.Empty);
-            message = message.Trim()
-                             .Replace("=\n", string.Empty)
-                             .Replace("=", string.Empty);
-
-            // Patch: Some markups has no ending div </div> and causes scraper to concat all three details...
-            recipient = recipient.Replace(recipientBank, string.Empty)
-                                 .Replace(recipientAccount, string.Empty)
-                                 .Replace("\n", string.Empty);
 
             // Parsing...
             var transactionDate = DateTime.ParseExact(transDate, "MMMM dd, yyyy", CultureInfo.CurrentCulture);
             var amount = decimal.Parse(strAmount);
 
-            return new FundTransfer
+            return new LoadPurchase
             {
                 ReferenceNo = referenceNo,
                 TransactionDate = transactionDate,
                 Recipient = recipient,
-                RecipientBank = recipientBank,
-                RecipientAccount = recipientAccount,
                 Amount = amount,
-                Message = message
             };
         }
     }

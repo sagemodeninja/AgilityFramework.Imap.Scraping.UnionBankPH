@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <PackageVersion>0.1.0</PackageVersion>
+    <PackageVersion>0.1.0-alpha</PackageVersion>
     <Authors>Gary Antier</Authors>
     <Copyright>Copyright © 2020 Gary Antier</Copyright>
     <PackageLicenseUrl>https://github.com/sagemodeninja/AgilityFramework.Imap.Scraping.UnionBankPH/blob/master/License.md</PackageLicenseUrl>
